@@ -1,0 +1,27 @@
+function @main:
+var x
+
+push 2
+push 8
+$sum
+pop x
+
+push x
+print "x = sum(2, 8) = %d"
+
+push 0
+ret top_value
+
+end_func
+
+function @sum:
+arg a, b
+
+var c, d
+
+push a
+push b
+add
+ret top_value
+
+end_func

@@ -1,0 +1,818 @@
+语法
+
+    0 $accept: Program $end
+
+    1 Program: %empty
+    2        | Program FuncDecl
+
+    3 FuncDecl: RetType FuncName '(' ArgList ')' '{' VarDecls Stmts '}'
+
+    4 RetType: T_Int
+    5        | T_Void
+
+    6 FuncName: T_Identifier
+
+    7 ArgList: %empty
+    8        | Args
+
+    9 Args: T_Int T_Identifier
+   10     | Args ',' T_Int T_Identifier
+
+   11 VarDecls: %empty
+   12         | VarDecls VarDecl ';'
+
+   13 VarDecl: T_Int T_Identifier
+   14        | VarDecl ',' T_Identifier
+
+   15 Stmts: %empty
+   16      | Stmts Stmt
+
+   17 Stmt: AssignStmt
+   18     | PrintStmt
+   19     | CallStmt
+   20     | ReturnStmt
+
+   21 AssignStmt: T_Identifier '=' Expr ';'
+
+   22 PrintStmt: T_Print '(' T_StringConstant PActuals ')' ';'
+
+   23 PActuals: %empty
+   24         | PActuals ',' Expr
+
+   25 CallStmt: CallExpr ';'
+
+   26 CallExpr: T_Identifier '(' Actuals ')'
+
+   27 Actuals: %empty
+   28        | Expr PActuals
+
+   29 ReturnStmt: T_Return Expr ';'
+   30           | T_Return ';'
+
+   31 Expr: Expr '+' Expr
+   32     | Expr '-' Expr
+   33     | Expr '*' Expr
+   34     | Expr '/' Expr
+   35     | '-' Expr
+   36     | T_IntConstant
+   37     | T_Identifier
+   38     | CallExpr
+   39     | '(' Expr ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 3 22 26 39
+')' (41) 3 22 26 39
+'*' (42) 33
+'+' (43) 31
+',' (44) 10 14 24
+'-' (45) 32 35
+'/' (47) 34
+';' (59) 12 21 22 25 29 30
+'=' (61) 21
+'{' (123) 3
+'}' (125) 3
+error (256)
+T_Int (258) 4 9 10 13
+T_Void (259) 5
+T_Return (260) 29 30
+T_Print (261) 22
+T_IntConstant (262) 36
+T_StringConstant (263) 22
+T_Identifier (264) 6 9 10 13 14 21 26 37
+U_neg (265)
+
+
+Nonterminals, with rules where they appear
+
+$accept (22)
+    左： 0
+Program (23)
+    左： 1 2, 右： 0 2
+FuncDecl (24)
+    左： 3, 右： 2
+RetType (25)
+    左： 4 5, 右： 3
+FuncName (26)
+    左： 6, 右： 3
+ArgList (27)
+    左： 7 8, 右： 3
+Args (28)
+    左： 9 10, 右： 8 10
+VarDecls (29)
+    左： 11 12, 右： 3 12
+VarDecl (30)
+    左： 13 14, 右： 12 14
+Stmts (31)
+    左： 15 16, 右： 3 16
+Stmt (32)
+    左： 17 18 19 20, 右： 16
+AssignStmt (33)
+    左： 21, 右： 17
+PrintStmt (34)
+    左： 22, 右： 18
+PActuals (35)
+    左： 23 24, 右： 22 24 28
+CallStmt (36)
+    左： 25, 右： 19
+CallExpr (37)
+    左： 26, 右： 25 38
+Actuals (38)
+    左： 27 28, 右： 26
+ReturnStmt (39)
+    左： 29 30, 右： 20
+Expr (40)
+    左： 31 32 33 34 35 36 37 38 39, 右： 21 24 28 29 31 32 33
+    34 35 39
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    $default  reduce using rule 1 (Program)
+
+    Program  转到状态 1
+
+
+State 1
+
+    0 $accept: Program . $end
+    2 Program: Program . FuncDecl
+
+    $end    shift, and go to state 2
+    T_Int   shift, and go to state 3
+    T_Void  shift, and go to state 4
+
+    FuncDecl  转到状态 5
+    RetType   转到状态 6
+
+
+State 2
+
+    0 $accept: Program $end .
+
+    $default  接受
+
+
+State 3
+
+    4 RetType: T_Int .
+
+    $default  reduce using rule 4 (RetType)
+
+
+State 4
+
+    5 RetType: T_Void .
+
+    $default  reduce using rule 5 (RetType)
+
+
+State 5
+
+    2 Program: Program FuncDecl .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 6
+
+    3 FuncDecl: RetType . FuncName '(' ArgList ')' '{' VarDecls Stmts '}'
+
+    T_Identifier  shift, and go to state 7
+
+    FuncName  转到状态 8
+
+
+State 7
+
+    6 FuncName: T_Identifier .
+
+    $default  reduce using rule 6 (FuncName)
+
+
+State 8
+
+    3 FuncDecl: RetType FuncName . '(' ArgList ')' '{' VarDecls Stmts '}'
+
+    '('  shift, and go to state 9
+
+
+State 9
+
+    3 FuncDecl: RetType FuncName '(' . ArgList ')' '{' VarDecls Stmts '}'
+
+    T_Int  shift, and go to state 10
+
+    $default  reduce using rule 7 (ArgList)
+
+    ArgList  转到状态 11
+    Args     转到状态 12
+
+
+State 10
+
+    9 Args: T_Int . T_Identifier
+
+    T_Identifier  shift, and go to state 13
+
+
+State 11
+
+    3 FuncDecl: RetType FuncName '(' ArgList . ')' '{' VarDecls Stmts '}'
+
+    ')'  shift, and go to state 14
+
+
+State 12
+
+    8 ArgList: Args .
+   10 Args: Args . ',' T_Int T_Identifier
+
+    ','  shift, and go to state 15
+
+    $default  reduce using rule 8 (ArgList)
+
+
+State 13
+
+    9 Args: T_Int T_Identifier .
+
+    $default  reduce using rule 9 (Args)
+
+
+State 14
+
+    3 FuncDecl: RetType FuncName '(' ArgList ')' . '{' VarDecls Stmts '}'
+
+    '{'  shift, and go to state 16
+
+
+State 15
+
+   10 Args: Args ',' . T_Int T_Identifier
+
+    T_Int  shift, and go to state 17
+
+
+State 16
+
+    3 FuncDecl: RetType FuncName '(' ArgList ')' '{' . VarDecls Stmts '}'
+
+    $default  reduce using rule 11 (VarDecls)
+
+    VarDecls  转到状态 18
+
+
+State 17
+
+   10 Args: Args ',' T_Int . T_Identifier
+
+    T_Identifier  shift, and go to state 19
+
+
+State 18
+
+    3 FuncDecl: RetType FuncName '(' ArgList ')' '{' VarDecls . Stmts '}'
+   12 VarDecls: VarDecls . VarDecl ';'
+
+    T_Int  shift, and go to state 20
+
+    $default  reduce using rule 15 (Stmts)
+
+    VarDecl  转到状态 21
+    Stmts    转到状态 22
+
+
+State 19
+
+   10 Args: Args ',' T_Int T_Identifier .
+
+    $default  reduce using rule 10 (Args)
+
+
+State 20
+
+   13 VarDecl: T_Int . T_Identifier
+
+    T_Identifier  shift, and go to state 23
+
+
+State 21
+
+   12 VarDecls: VarDecls VarDecl . ';'
+   14 VarDecl: VarDecl . ',' T_Identifier
+
+    ','  shift, and go to state 24
+    ';'  shift, and go to state 25
+
+
+State 22
+
+    3 FuncDecl: RetType FuncName '(' ArgList ')' '{' VarDecls Stmts . '}'
+   16 Stmts: Stmts . Stmt
+
+    T_Return      shift, and go to state 26
+    T_Print       shift, and go to state 27
+    T_Identifier  shift, and go to state 28
+    '}'           shift, and go to state 29
+
+    Stmt        转到状态 30
+    AssignStmt  转到状态 31
+    PrintStmt   转到状态 32
+    CallStmt    转到状态 33
+    CallExpr    转到状态 34
+    ReturnStmt  转到状态 35
+
+
+State 23
+
+   13 VarDecl: T_Int T_Identifier .
+
+    $default  reduce using rule 13 (VarDecl)
+
+
+State 24
+
+   14 VarDecl: VarDecl ',' . T_Identifier
+
+    T_Identifier  shift, and go to state 36
+
+
+State 25
+
+   12 VarDecls: VarDecls VarDecl ';' .
+
+    $default  reduce using rule 12 (VarDecls)
+
+
+State 26
+
+   29 ReturnStmt: T_Return . Expr ';'
+   30           | T_Return . ';'
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+    ';'            shift, and go to state 41
+
+    CallExpr  转到状态 42
+    Expr      转到状态 43
+
+
+State 27
+
+   22 PrintStmt: T_Print . '(' T_StringConstant PActuals ')' ';'
+
+    '('  shift, and go to state 44
+
+
+State 28
+
+   21 AssignStmt: T_Identifier . '=' Expr ';'
+   26 CallExpr: T_Identifier . '(' Actuals ')'
+
+    '('  shift, and go to state 45
+    '='  shift, and go to state 46
+
+
+State 29
+
+    3 FuncDecl: RetType FuncName '(' ArgList ')' '{' VarDecls Stmts '}' .
+
+    $default  reduce using rule 3 (FuncDecl)
+
+
+State 30
+
+   16 Stmts: Stmts Stmt .
+
+    $default  reduce using rule 16 (Stmts)
+
+
+State 31
+
+   17 Stmt: AssignStmt .
+
+    $default  reduce using rule 17 (Stmt)
+
+
+State 32
+
+   18 Stmt: PrintStmt .
+
+    $default  reduce using rule 18 (Stmt)
+
+
+State 33
+
+   19 Stmt: CallStmt .
+
+    $default  reduce using rule 19 (Stmt)
+
+
+State 34
+
+   25 CallStmt: CallExpr . ';'
+
+    ';'  shift, and go to state 47
+
+
+State 35
+
+   20 Stmt: ReturnStmt .
+
+    $default  reduce using rule 20 (Stmt)
+
+
+State 36
+
+   14 VarDecl: VarDecl ',' T_Identifier .
+
+    $default  reduce using rule 14 (VarDecl)
+
+
+State 37
+
+   36 Expr: T_IntConstant .
+
+    $default  reduce using rule 36 (Expr)
+
+
+State 38
+
+   26 CallExpr: T_Identifier . '(' Actuals ')'
+   37 Expr: T_Identifier .
+
+    '('  shift, and go to state 45
+
+    $default  reduce using rule 37 (Expr)
+
+
+State 39
+
+   35 Expr: '-' . Expr
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 48
+
+
+State 40
+
+   39 Expr: '(' . Expr ')'
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 49
+
+
+State 41
+
+   30 ReturnStmt: T_Return ';' .
+
+    $default  reduce using rule 30 (ReturnStmt)
+
+
+State 42
+
+   38 Expr: CallExpr .
+
+    $default  reduce using rule 38 (Expr)
+
+
+State 43
+
+   29 ReturnStmt: T_Return Expr . ';'
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+
+    '+'  shift, and go to state 50
+    '-'  shift, and go to state 51
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+    ';'  shift, and go to state 54
+
+
+State 44
+
+   22 PrintStmt: T_Print '(' . T_StringConstant PActuals ')' ';'
+
+    T_StringConstant  shift, and go to state 55
+
+
+State 45
+
+   26 CallExpr: T_Identifier '(' . Actuals ')'
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    $default  reduce using rule 27 (Actuals)
+
+    CallExpr  转到状态 42
+    Actuals   转到状态 56
+    Expr      转到状态 57
+
+
+State 46
+
+   21 AssignStmt: T_Identifier '=' . Expr ';'
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 58
+
+
+State 47
+
+   25 CallStmt: CallExpr ';' .
+
+    $default  reduce using rule 25 (CallStmt)
+
+
+State 48
+
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+   35     | '-' Expr .
+
+    $default  reduce using rule 35 (Expr)
+
+
+State 49
+
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+   39     | '(' Expr . ')'
+
+    '+'  shift, and go to state 50
+    '-'  shift, and go to state 51
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+    ')'  shift, and go to state 59
+
+
+State 50
+
+   31 Expr: Expr '+' . Expr
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 60
+
+
+State 51
+
+   32 Expr: Expr '-' . Expr
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 61
+
+
+State 52
+
+   33 Expr: Expr '*' . Expr
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 62
+
+
+State 53
+
+   34 Expr: Expr '/' . Expr
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 63
+
+
+State 54
+
+   29 ReturnStmt: T_Return Expr ';' .
+
+    $default  reduce using rule 29 (ReturnStmt)
+
+
+State 55
+
+   22 PrintStmt: T_Print '(' T_StringConstant . PActuals ')' ';'
+
+    $default  reduce using rule 23 (PActuals)
+
+    PActuals  转到状态 64
+
+
+State 56
+
+   26 CallExpr: T_Identifier '(' Actuals . ')'
+
+    ')'  shift, and go to state 65
+
+
+State 57
+
+   28 Actuals: Expr . PActuals
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+
+    '+'  shift, and go to state 50
+    '-'  shift, and go to state 51
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+
+    $default  reduce using rule 23 (PActuals)
+
+    PActuals  转到状态 66
+
+
+State 58
+
+   21 AssignStmt: T_Identifier '=' Expr . ';'
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+
+    '+'  shift, and go to state 50
+    '-'  shift, and go to state 51
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+    ';'  shift, and go to state 67
+
+
+State 59
+
+   39 Expr: '(' Expr ')' .
+
+    $default  reduce using rule 39 (Expr)
+
+
+State 60
+
+   31 Expr: Expr . '+' Expr
+   31     | Expr '+' Expr .
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+
+    $default  reduce using rule 31 (Expr)
+
+
+State 61
+
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   32     | Expr '-' Expr .
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+
+    $default  reduce using rule 32 (Expr)
+
+
+State 62
+
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   33     | Expr '*' Expr .
+   34     | Expr . '/' Expr
+
+    $default  reduce using rule 33 (Expr)
+
+
+State 63
+
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+   34     | Expr '/' Expr .
+
+    $default  reduce using rule 34 (Expr)
+
+
+State 64
+
+   22 PrintStmt: T_Print '(' T_StringConstant PActuals . ')' ';'
+   24 PActuals: PActuals . ',' Expr
+
+    ')'  shift, and go to state 68
+    ','  shift, and go to state 69
+
+
+State 65
+
+   26 CallExpr: T_Identifier '(' Actuals ')' .
+
+    $default  reduce using rule 26 (CallExpr)
+
+
+State 66
+
+   24 PActuals: PActuals . ',' Expr
+   28 Actuals: Expr PActuals .
+
+    ','  shift, and go to state 69
+
+    $default  reduce using rule 28 (Actuals)
+
+
+State 67
+
+   21 AssignStmt: T_Identifier '=' Expr ';' .
+
+    $default  reduce using rule 21 (AssignStmt)
+
+
+State 68
+
+   22 PrintStmt: T_Print '(' T_StringConstant PActuals ')' . ';'
+
+    ';'  shift, and go to state 70
+
+
+State 69
+
+   24 PActuals: PActuals ',' . Expr
+
+    T_IntConstant  shift, and go to state 37
+    T_Identifier   shift, and go to state 38
+    '-'            shift, and go to state 39
+    '('            shift, and go to state 40
+
+    CallExpr  转到状态 42
+    Expr      转到状态 71
+
+
+State 70
+
+   22 PrintStmt: T_Print '(' T_StringConstant PActuals ')' ';' .
+
+    $default  reduce using rule 22 (PrintStmt)
+
+
+State 71
+
+   24 PActuals: PActuals ',' Expr .
+   31 Expr: Expr . '+' Expr
+   32     | Expr . '-' Expr
+   33     | Expr . '*' Expr
+   34     | Expr . '/' Expr
+
+    '+'  shift, and go to state 50
+    '-'  shift, and go to state 51
+    '*'  shift, and go to state 52
+    '/'  shift, and go to state 53
+
+    $default  reduce using rule 24 (PActuals)
